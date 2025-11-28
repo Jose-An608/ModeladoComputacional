@@ -1,0 +1,42 @@
+# Ejercicio 1: Lagrange
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos de puntos conocidos
+x_points = np.array([1.0, 2.0, 4.0])
+y_points = np.array([2.0, 3.0, 1.0])
+
+# Función para evaluar el polinomio de Lagrange
+def lagrange_eval(x, xs, ys):
+    n = len(xs)
+    total = 0.0
+    for i in range(n):
+        li = 1.0
+        for j in range(n):
+            if j != i:
+                li *= (x - xs[j]) / (xs[i] - xs[j])
+        total += ys[i] * li
+    return total
+
+# Valor a evaluar
+x_eval = 3.0
+y_eval = lagrange_eval(x_eval, x_points, y_points)
+
+print("P(3) (Lagrange) =", y_eval)
+
+# --- Parte gráfica ---
+# Crear puntos para graficar la curva interpolada
+x_vals = np.linspace(min(x_points) - 1, max(x_points) + 1, 200)
+y_vals = [lagrange_eval(x, x_points, y_points) for x in x_vals]
+
+plt.figure(figsize=(7, 5))
+plt.plot(x_vals, y_vals, label='Polinomio de Lagrange', color='blue')
+plt.scatter(x_points, y_points, color='red', label='Puntos conocidos', zorder=5)
+plt.scatter(x_eval, y_eval, color='green', label=f'P(3) = {y_eval:.2f}', zorder=5)
+
+plt.title('Interpolación de Lagrange')
+plt.xlabel('x')
+plt.ylabel('P(x)')
+plt.legend()
+plt.grid(True)
+plt.show()

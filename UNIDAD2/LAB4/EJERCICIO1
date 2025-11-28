@@ -1,0 +1,39 @@
+import math
+import numpy as np
+
+def f(x):
+    return x / (x**4 + 1)
+
+# Parámetros
+a, b = 1.0, 3.0
+n = 8
+h = (b - a) / n
+
+# Nodos y valores
+xs = np.linspace(a, b, n+1)
+fs = f(xs)
+
+# Trapecio compuesto
+T = h * (0.5*(fs[0] + fs[-1]) + fs[1:-1].sum())
+
+# Estimación numérica de f''(x)
+xx = np.linspace(a, b, 1001)
+ff = f(xx)
+dx = xx[1] - xx[0]
+
+f2 = np.zeros_like(ff)
+f2[1:-1] = (ff[2:] - 2*ff[1:-1] + ff[:-2]) / dx**2
+f2[0] = (ff[2] - 2*ff[1] + ff[0]) / dx**2
+f2[-1] = (ff[-1] - 2*ff[-2] + ff[-3]) / dx**2
+
+M2 = np.max(np.abs(f2))
+error_bound = (b - a) * h**2 * M2 / 12
+
+# Imprimir resultados
+print("h =", h)
+print("Nodos x_i:", xs)
+print("f(x_i):", fs)
+print("Trapecio compuesto T =", T)
+# print("Diferencia (ref - T) =", ref - T)  # (solo si tienes 'ref')
+print("Estimación max |f''(x)| ≈", M2)
+print("Cota error trapecio <= ", error_bound)

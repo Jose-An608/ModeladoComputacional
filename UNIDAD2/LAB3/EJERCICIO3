@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos medidos
+x = np.array([2, 4, 6, 8])    # Espesor (cm)
+y = np.array([120, 95, 70, 50])  # Pérdida (W)
+
+# 1. Ajuste lineal y = a0 + a1*x
+coef = np.polyfit(x, y, 1)   # coef[0] = a1, coef[1] = a0
+p = np.poly1d(coef)
+
+# 2. Hallar coeficientes
+a1, a0 = coef[0], coef[1]
+print(f"Coeficientes del modelo:")
+print(f"a1 (pendiente) = {a1:.4f}")
+print(f"a0 (intercepto) = {a0:.4f}")
+
+# 3. Predicción para X = 5 cm
+x_pred = 5
+y_pred = p(x_pred)
+print(f"\nPredicción para x = {x_pred} cm:")
+print(f"y({x_pred}) = {y_pred:.2f} W")
+
+# 4. Calcular el error cuadrático medio (ECM)
+y_calc = p(x)
+ECM = np.mean((y - y_calc)**2)
+print(f"\nError cuadrático medio (ECM): {ECM:.4f}")
+
+# 5. Gráfica
+plt.scatter(x, y, color='red', label='Datos experimentales')
+plt.plot(x, y_calc, color='blue',
+         label=f'Ajuste: y = {a1:.2f}x + {a0:.2f}')
+plt.title('Ajuste Lineal — Pérdida de Calor vs Espesor')
+plt.xlabel('Espesor (cm)')
+plt.ylabel('Pérdida (W)')
+plt.legend()
+plt.grid(True)
+
+# Mostrar el valor predicho
+plt.scatter(x_pred, y_pred, color='green', label=f'Predicción (x={x_pred} cm)')
+plt.legend()
+plt.show()

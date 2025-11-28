@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos medidos
+x = np.array([10, 20, 30, 40])   # Velocidad (m/s)
+y = np.array([6, 25, 60, 110])   # Distancia (m)
+
+# 1. Ajuste cuadrático: y = a0 + a1*x + a2*x^2
+coef = np.polyfit(x, y, 2)   # coef[0]=a2, coef[1]=a1, coef[2]=a0
+p = np.poly1d(coef)
+
+# 2. Hallar coeficientes
+a2, a1, a0 = coef[0], coef[1], coef[2]
+print("Coeficientes del modelo:")
+print(f"a2 = {a2:.6f}")
+print(f"a1 = {a1:.6f}")
+print(f"a0 = {a0:.6f}")
+
+# 3. Predicción para X = 25 m/s
+x_pred = 25
+y_pred = p(x_pred)
+print(f"\nPredicción para x = {x_pred} m/s:")
+print(f"y({x_pred}) = {y_pred:.2f} m")
+
+# 4. Calcular el error cuadrático medio (ECM)
+y_calc = p(x)
+ECM = np.mean((y - y_calc)**2)
+print(f"\nError cuadrático medio (ECM): {ECM:.4f}")
+
+# 5. Gráfica
+x_line = np.linspace(min(x), max(x), 100)
+y_line = p(x_line)
+
+plt.scatter(x, y, color='red', label='Datos experimentales')
+plt.plot(x_line, y_line, color='blue',
+         label=f'Ajuste: y = {a2:.4f}x² + {a1:.4f}x + {a0:.4f}')
+plt.scatter(x_pred, y_pred, color='green', label=f'Predicción (x={x_pred} m/s)')
+
+plt.title('Ajuste Cuadrático — Distancia de Frenado vs Velocidad')
+plt.xlabel('Velocidad (m/s)')
+plt.ylabel('Distancia (m)')
+plt.legend()
+plt.grid(True)
+plt.show()

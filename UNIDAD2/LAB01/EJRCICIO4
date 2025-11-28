@@ -1,0 +1,49 @@
+# ===============================================
+# EJERCICIO 5 - Enfriamiento de un líquido
+# ===============================================
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos
+x_points = np.array([0.0, 5.0, 10.0])
+y_points = np.array([90.0, 70.0, 55.0])
+x_eval = 7.0
+
+# ---- Función para obtener coeficientes del polinomio de Lagrange ----
+def lagrange_poly_coeffs(xs, ys):
+    n = len(xs)
+    result = np.zeros(n)
+    for i in range(n):
+        xs_excl = np.delete(xs, i)
+        numer_coeffs = np.poly(xs_excl)
+        denom = np.prod(xs[i] - xs_excl)
+        if len(numer_coeffs) < len(result):
+            numer_coeffs = np.pad(numer_coeffs, (len(result)-len(numer_coeffs), 0), 'constant')
+        result = result + ys[i] * numer_coeffs / denom
+    return result
+
+# ---- Construir polinomio y evaluar ----
+coeffs = lagrange_poly_coeffs(x_points, y_points)
+P = np.poly1d(coeffs)
+y_eval = P(x_eval)
+
+print("=== EJERCICIO 5 ===")
+print("Polinomio interpolador P(x):")
+print(P)
+print(f"P({x_eval}) = {y_eval:.2f} °C")
+
+# ---- Parte gráfica ----
+x_vals = np.linspace(min(x_points) - 1, max(x_points) + 1, 200)
+y_vals = P(x_vals)
+
+plt.figure(figsize=(7, 5))
+plt.plot(x_vals, y_vals, label='Polinomio de Lagrange', color='blue')
+plt.scatter(x_points, y_points, color='red', label='Puntos conocidos', zorder=5)
+plt.scatter(x_eval, y_eval, color='green', label=f'P(7) = {y_eval:.1f} °C', zorder=5)
+
+plt.title('Enfriamiento de un líquido - Interpolación de Lagrange')
+plt.xlabel('Tiempo (min)')
+plt.ylabel('Temperatura (°C)')
+plt.legend()
+plt.grid(True)
+plt.show()
