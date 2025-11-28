@@ -1,0 +1,13 @@
+import numpy as np
+from scipy.optimize import fsolve
+
+def sistema10(vars):
+    x, y, z = vars
+    return [
+        np.log(x + 2) + y + z - 3,
+        x + np.log(y + 2) + z - 4,
+        x + y + np.log(z + 2) - 5
+    ]
+
+sol10 = fsolve(sistema10, [1, 1, 1])
+print("Ejercicio 10 - solución aproximada (x,y,z) =", sol10)

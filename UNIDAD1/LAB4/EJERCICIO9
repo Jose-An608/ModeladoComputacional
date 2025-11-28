@@ -1,0 +1,13 @@
+import numpy as np
+from scipy.optimize import fsolve
+
+def sistema9(vars):
+    x, y, z = vars
+    return [
+        np.exp(x) + y + z - 4,
+        x + np.exp(y) + z - 5,
+        x + y + np.exp(z) - 6
+    ]
+
+sol9 = fsolve(sistema9, [1, 1, 1])
+print("Ejercicio 9 - solución aproximada (x,y,z) =", sol9)

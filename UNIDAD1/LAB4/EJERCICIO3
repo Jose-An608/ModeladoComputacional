@@ -1,0 +1,25 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import fsolve
+
+def ej3(vars):
+    x,y = vars
+    return [x**3 - y, x+y**2-4]
+
+#Resolver
+sol3 = fsolve(ej3, [1,1]) #fsolve es de scipy.optimize busca una solucion numerica
+print("Ejercicio 3:", sol3)
+
+#Crear malla para graficar
+x = np.linspace(-3,3,400)
+y = np.linspace(-3,3,400)
+X,Y = np.meshgrid(x,y)
+
+#Graficar
+plt.contour(X, Y, X**3 - Y, [0], colors='r')
+plt.contour(X,Y,X + Y**2 - 4, [0], colors='b')
+plt.plot(sol3[0], sol3[1], 'go')#solciones cerca a 1,1
+plt.title("Ejercicio 3 ")
+plt.xlabel("x"); plt.ylabel("y")
+plt.grid(True); plt.show() #activa la grilla, lineas de referencia horizontales y vertticales 
+#muestra el graifico
